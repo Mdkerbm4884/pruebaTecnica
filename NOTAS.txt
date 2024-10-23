@@ -1,0 +1,134 @@
+
+//---------------dependency-------------------//
+ <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+      <version>3.7.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-java</artifactId>
+      <version>1.2.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-jvm-deps</artifactId>
+      <version>1.0.5</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-junit</artifactId>
+      <version>1.2.5</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.vimalselvam</groupId>
+      <artifactId>cucumber-extentsreport</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.aventstack</groupId>
+      <artifactId>extentreports</artifactId>
+      <version>3.1.2</version>
+    </dependency>
+	
+	
+	
+	//---------CREACION DE PROYECTO-------//
+	
+	Una vez intalado cucumber, creado el proyecto, se creara la siguiente linea de carpetas 
+	Ruta:src/test/java/
+	carpeta :Features se crear achivo "Test.feature" para los escenarios de pruebas en gherkin
+	Carpeta: Runner se crear la clase TestRunner, para llamar los escenarios y ejecutarlos con cucumber 
+	Carpeta:Seleniumgluecode se crea la clase "Test", para crear los scrpit 
+	
+//-----------gherkin----------//
+
+	Feature: "define la característica que estás describiendo"
+			"Se da un ender y se entiende que aca ira la descipcion del escenario"
+
+  Scenario: "Nombre del escenario"
+    Given "se utiliza para establecer el estado inicial del sistema"
+    When "describe la acción que el usuario realiza"
+    Then "se usa para verificar el resultado esperado"
+	
+	
+	EJEMPLO:
+	Feature: Categoria comic
+  Como usuario, quiero leer chistes.
+
+  Scenario: Ingresar a la categoría comic
+    Given el usuario se encuentra en la página home
+    When hace click en la opción para ver comic
+    Then la página redirige a la pantalla de comic
+	
+	
+	
+//-----clase runner""CUCUMBER"------//
+
+Se importa @RunWith(Cucumber.class) para indicar que esta clase debe ser ejecutada con el runner de Cucumber
+luego se importa "CucumberOptions" ya se llaman las demas clases 
+@CucumberOptions(
+        features = "src/test/java/Features",
+        glue = {"seleniumgluecode"}
+)
+
+
+//-----------Seleniumgluecode--------------//
+Se usa la siguiente sintaxis 
+
+@Given("Se ingresa la descripcion puesta en este caso en la anotacion Given")
+    public void "SePondraElNombreDelMetodo"() throws Throwable: "Esta parte indica que el método puede lanzar una excepción de tipo Throwable" {
+        throw new PendingException()"xcepción utilizada en Cucumber para indicar que la implementación del paso aún no está completa";
+    }
+	
+	EJEMPLO
+	@Given("el usuario se encuentra en la pagina home")
+    public void pagina_home() throws Throwable {
+        throw new PendingException();
+    }
+	
+	
+//------------COMANDOS-------------//
+
+LLAMODO DE CLASES PARA EL RUNNER 
+@RunWith(Cucumber.class)
+
+@CucumberOptions(
+        features = "src/test/java/Features",
+        glue = {"seleniumgluecode"}
+)
+
+
+WebDriverManager.chromedriver().setup(); //se utiliza para gestionar automáticamente el driver de Chrome 
+
+formas de busqueda de elemtos 
+
+By.id("element-id")
+By.name("element-name")
+By.tagName("element-tag")
+By.cssSelector(".clase")
+By.xpath("//div[@class='clase']")
+
+
+
+	
+	
+	
+	
+	
+	
+	
