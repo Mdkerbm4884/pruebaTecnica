@@ -1,13 +1,23 @@
 Feature: carito de compras
   usuario realizara compras
 
-  Scenario: Usuario agrega producto
-    Given el usaurio selecciona productos
-    When el estado de producto cambia
+  Scenario: Escenario1 Usuario agrega producto
+    Given el usaurio ingresa al sistema
+    When el usuario selecciona productos
     Then el producto se agrega al carrito
 
 
-  Scenario:El usuario continua con la compra
+  Scenario: Escenario2 El usuario continua con la compra
     Given el usaurio realizara la compra
     When el sistema realizara la suma del valor de los productos
     Then el sistema realiza la suma correctamente
+
+  Scenario: Escenario3 el usuario quita comprar del carrito
+    Given el usaurio ingresa nuevamente al sistema
+    When el usuario selecciona y elimina prodcutos
+    Then productos disponibles para compra nuevamente
+
+  Scenario: Usuario no puede remover productos
+    Given el usario seleciona los productos
+    When usuario intenta remover productos
+    Then sistema no habilita boton

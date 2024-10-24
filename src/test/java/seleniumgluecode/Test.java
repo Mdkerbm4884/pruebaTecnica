@@ -25,35 +25,29 @@ public class Test {
     private Connection connection;
     metodosUtil metodosUtil = new metodosUtil(driver);
 
-    @Given("el usaurio selecciona productos")
-    public void elUsuarioSeEncuentraEnLaPaginaHome() {
+    @Given("el usaurio ingresa al sistema")
+    public void IngresoSistema() {
        WebDriverManager.chromedriver().setup();
         //------ INICIALIZACION
 
         driver = new ChromeDriver();
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        By by =By.id("continue");
-        //------------------------------------
+        // No crees una nueva instancia de driver aquí
+        driver.get("https://www.saucedemo.com/");
+        driver.manage().window().maximize(); // MAXIMIZA LA PAGINA
 
+        // Esperar a que el campo de usuario sea visible
+        metodosUtil.esperarElementoVisible(By.id("user-name"));
 
-        //ingreso a la pagina y credenciales
-        driver.get("https://www.saucedemo.com/"); // iNGRESO A LA PAGINA
-        driver.manage().window().maximize(); //MAXIMIZA LA PAGINA
-
-        metodosUtil.esperarElementoVisible(By.id(("user-name")));// se crea metedo para que el codigo avance solo cuando
-        //el campo que se envie este visible
-
-        //Se ingresan credenciales
+        // Se ingresan credenciales
         driver.findElement(By.id("user-name")).sendKeys("standard_user");
         driver.findElement(By.id("password")).sendKeys("secret_sauce");
         driver.findElement(By.id("login-button")).click();
 
 
-        //driver.manage().window().maximize();
     }
 
-    @When("el estado de producto cambia")
-    public void hace_click_en_la_opcion_para_ver_comic() throws Throwable {
+    @When("el usuario selecciona productos")
+    public void agregarProductos() throws Throwable {
        //Se agregaran compras
         metodosUtil.esperarElementoVisible(By.id("add-to-cart-sauce-labs-backpack"));
         driver.findElement(By.id("add-to-cart-sauce-labs-backpack")).click();
@@ -61,7 +55,7 @@ public class Test {
     }
 
     @Then("el producto se agrega al carrito")
-    public void la_pagina_redirige_a_la_pantalla_de_comic() throws Throwable {
+    public void CarritoCompras() throws Throwable {
         //se valida que la cantidad de prosuctos agregados sea la correcta
         driver.findElement(By.className("shopping_cart_link")).click();
         WebElement cartBadgeElement = driver.findElement(By.className("shopping_cart_badge"));
@@ -73,6 +67,7 @@ public class Test {
                 System.out.println("El número de productos en el carrito es 2.");
             } else {
                 System.out.println("El número de productos en el carrito no es 2, es: " + cartCount);
+                metodosUtil.capturar("Escenario1Then","C:/PruebasAutomatizadas/AutomatizacionMVM/");
             }
         } catch (NumberFormatException e) {
             System.out.println("Error: No se pudo convertir el valor del carrito a un número. Valor recibido: " + cartBadgeValue);
@@ -122,7 +117,7 @@ public class Test {
                 System.out.println("Suma correcta");
             }else {
                 System.out.println("Valor no cincide");
-                metodosUtil.capturar("ValorIncorrecto");
+                metodosUtil.capturar("Escenario2When","C:/PruebasAutomatizadas/AutomatizacionMVM/");
                 System.exit(0);
             }
     }
@@ -131,9 +126,72 @@ public class Test {
     public void Valirdar()throws Throwable {
         //Si la suma es correcta el sitema continua con la ejecucion
         driver.findElement(By.id("finish")).click();
-        driver.findElement(By.id("back-to-products")).click();
+
+        //driver.navigate().refresh();
+
+
     }
 
+    //---ESCENARIO 3----------
+    @Given("el usaurio ingresa nuevamente al sistema")
+    public void NuevoIngresoSistema() {
+        //Usurio retoma a la pantalla inicial
+        driver.findElement(By.id("back-to-products")).click();//Finaliza Compra
+
+    }
+    @When("el usuario selecciona y elimina prodcutos")
+    public void eliminarProducto()throws Throwable{
+
+        driver.findElement(By.id("add-to-cart-sauce-labs-bike-light")).click();
+        driver.findElement(By.id("shopping_cart_container")).click();
+        metodosUtil.capturar("Evidenciacarrito","C:/PruebasAutomatizadas/AutomatizacionMVM/Ep3EvidenciaWHen/");
+    }
+
+    @Then("productos disponibles para compra nuevamente")
+    public void  cambioStado(){
+
+        //Se eliminara los productos y se tomara evidencia
+        driver.findElement(By.id("remove-sauce-labs-bike-light")).click();
+        metodosUtil.capturar("Carritovacio","C:/PruebasAutomatizadas/AutomatizacionMVM/Ep3EvidenciaThen/");
+        driver.findElement(By.id("continue-shopping")).click();
+        metodosUtil.esperarElementoVisible(By.id("item_4_title_link"));
+        driver.findElement(By.id("item_4_title_link")).click();
+        metodosUtil.capturar("ProductoDisponible","C:/PruebasAutomatizadas/AutomatizacionMVM/Ep3EvidenciaThen/");
+    }
+
+//------------Escenario4----------------
+    @Given("el usario seleciona los productos")
+    public  void ingresaProductos(){
+        driver.findElement(By.id("react-burger-menu-btn")).click();
+        metodosUtil.esperarElementoVisible(By.id("logout_sidebar_link"));
+        driver.findElement(By.id("logout_sidebar_link")).click();
+        driver.findElement(By.id("user-name")).sendKeys("problem_user");
+        driver.findElement(By.id("password")).sendKeys("secret_sauce");
+        driver.findElement(By.id("login-button")).click();
+    }
+
+    @When("usuario intenta remover productos")
+    public void usuario_intenta_remover_productos() {
+        //usuario agrega prodcuto
+        metodosUtil.capturar("EstadoACTUAL","C:/PruebasAutomatizadas/AutomatizacionMVM/Ep4EvidencisWhen/");
+        driver.findElement(By.id("add-to-cart-sauce-labs-backpack")).click();
 
 
+    }
+    @Then("sistema no habilita boton")
+    public void sistema_no_habilita_boton() {
+        //Validar que el boton este hablitado
+        WebElement botonEliminar = driver.findElement(By.id("remove-sauce-labs-backpack"));
+
+        boolean habilitado = botonEliminar.isEnabled();
+        if (habilitado){
+            System.out.println("Boton habilidato");
+            metodosUtil.capturar("Boton","C:/PruebasAutomatizadas/AutomatizacionMVM/EpEvidenciaThen/");
+        }else {
+            System.out.println("boton No habiltado");
+            metodosUtil.capturar("Boton","C:/PruebasAutomatizadas/AutomatizacionMVM/EpEvidenciaThen/");
+        }
+
+
+    }
 }
