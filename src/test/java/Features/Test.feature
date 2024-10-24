@@ -17,7 +17,12 @@ Feature: carito de compras
     When el usuario selecciona y elimina prodcutos
     Then productos disponibles para compra nuevamente
 
-  Scenario: Usuario no puede remover productos
+  Scenario: Escenario4 Usuario no puede remover productos
     Given el usario seleciona los productos
     When usuario intenta remover productos
     Then sistema no habilita boton
+
+  Scenario: Escenario5 Medir el tiempo que tarda el login
+    Given se inicia seccion
+    When mido el tiempo de espera
+    Then el tiempo de espera es demaciado
